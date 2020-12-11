@@ -7,13 +7,26 @@ public class BeerExpert {
 
     List<String> getBrands(String color) {
         List<String> brands = new ArrayList<>();
-        if (color.equals("Янтарное")) {
-            brands.add("O'Hara's Amber Adventure");
-            brands.add("Jack Amber");
-        } else {
-            brands.add("Jail Pail Ale");
-            brands.add("Gout Stout");
+        switch (color) {
+            case "Светлое":
+                brands.add("Bud Light");
+                brands.add("Stella Artois");
+                brands.add("Жигули Export");
+                break;
+            case "Темное":
+                brands.add("Козел Темное");
+                brands.add("Жатецкий Гусь Темное");
+                break;
+            case "Коричневое":
+                brands.add("Не знаю таких))");
+                break;
+            case "Янтарное":
+                brands.add("Волга Янтарное");
+                brands.add("Эль Янтарный");
+                break;
         }
+
+
         return brands;
     }
 
