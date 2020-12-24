@@ -14,6 +14,8 @@
 has built its reputation as one of America’s best Italian-Digital restaurants.
         Some people believe eating out is about being with your friends and family.
         We believe that good food is best enjoyed while staring at your phone.</string>
+    <string name="order_name_hint">Please enter your name</string>
+    <string name="order_details_hint">Please enter your order</string>
 
     <string-array name="pizzas">
         <item>Diavolo</item>
