@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PizzaDetailActivity"></activity>
+        <activity
+            android:name=".PizzaDetailActivity"
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".OrderActivity"
             android:label="@string/create_order"
