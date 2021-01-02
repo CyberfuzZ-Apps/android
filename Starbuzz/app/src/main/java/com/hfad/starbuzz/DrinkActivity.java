@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -77,24 +78,51 @@ public class DrinkActivity extends Activity {
     public void onFavoriteClicked(View view) {
         int drinkId = (Integer) getIntent().getExtras().get(EXTRA_DRINKID);
 
-        //Получение значения флажка
-        CheckBox favorite = (CheckBox) findViewById(R.id.favorite);
-        ContentValues drinkValues = new ContentValues();
-        drinkValues.put("FAVORITE", favorite.isChecked());
+        new UpdateDrinkTask().execute(drinkId);
+    }
 
-        //Получение ссылки на базу данных и обновление столбца FAVORITE
-        SQLiteOpenHelper starbuzzDatabaseHelper = new StarbuzzDatabaseHelper(this);
-        try {
-            SQLiteDatabase db = starbuzzDatabaseHelper.getWritableDatabase();
-            db.update("DRINK",
-                    drinkValues,
-                    "_id = ?",
-                    new String[] {Integer.toString(drinkId)});
-            db.close();
-        } catch (SQLiteException e) {
-            Toast toast = Toast.makeText(this, "Database unavailable",
-                    Toast.LENGTH_SHORT);
-            toast.show();
+    //Внутренний класс для обновления напитка
+    private class UpdateDrinkTask extends AsyncTask<Integer, Void, Boolean> {
+
+        private ContentValues drinkValues;
+
+        //Перед выполнением кода базы данных значение флажка
+        //помещается в объект drinkValues
+        protected void onPreExecute() {
+            //Получение значения флажка
+            CheckBox favorite = (CheckBox) findViewById(R.id.favorite);
+            drinkValues = new ContentValues();
+            drinkValues.put("FAVORITE", favorite.isChecked());
+        }
+
+        //Код базы данных выполняется в фоновом режиме
+        protected Boolean doInBackground(Integer... drinks) {
+            int drinkId = drinks[0];
+
+            //Получение ссылки на базу данных и обновление столбца FAVORITE
+            SQLiteOpenHelper starbuzzDatabaseHelper =
+                    new StarbuzzDatabaseHelper(DrinkActivity.this);
+            try {
+                SQLiteDatabase db = starbuzzDatabaseHelper.getWritableDatabase();
+                db.update("DRINK",
+                        drinkValues,
+                        "_id = ?",
+                        new String[] {Integer.toString(drinkId)});
+                db.close();
+                return true;
+            } catch (SQLiteException e) {
+                return false;
+        }
+    }
+
+    //Если при выполнении кода базы данных произошла ошибка,
+    //вывести сообщение для пользователя
+    protected void onPostExecute(Boolean success) {
+            if (!success) {
+                Toast toast = Toast.makeText(DrinkActivity.this,
+                        "Database unavailable", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
     }
 }
