@@ -10,5 +10,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FractionView view = (FractionView) findViewById(R.id.fractionView);
+        view.setFraction("1/3");
     }
 }
